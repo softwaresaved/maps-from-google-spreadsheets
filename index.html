@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Google Maps from Google Spreadsheets Demo</title>
+    <style>
+        #map {
+        height: 400px;
+        width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<h3>Google Maps from Google Spreadsheets Demo</h3>
+
+<div id="map"></div>
+<!-- Replace the value of the key parameter with your own API key. -->
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD112yF6ORTtrx1-ugfhJLcx1VHDOla1Vs&callback=initialiseMap">
+</script>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+<script>
+    var map;
+var locations = [];
+
+function initialiseMap() {
+  loadDataSync();
+  //locations = [   ["Title 1", 55.862148, -4.2412735],
+  //  ["Title 2", 52.3800625, -1.5616976]
+ // ];
+
+  /* center on (0, 0). Map center and zoom will reconfigure later (fitbounds method)*/
+  var mapOptions = {
+    zoom: 10,
+    center: new google.maps.LatLng(0, 0)
+  };
+  var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+  setLocations(map, locations);
+}
+
+function loadData() {
+  $.getJSON("https://spreadsheets.google.com/feeds/list/1fBLlw8xlO_yhL8rYfFlQnzvKR-swEtE7NRX41ysARCk/od6/public/values?alt=json", function(data) {
+    	var entries = data.feed.entry;
+    	$(entries).each(function() {
+    		var location = {};
+				location.title = this['gsx$title']['$t'];
+				location.latitude = parseFloat(this['gsx$lat']['$t']);
+      	location.longitude = parseFloat(this['gsx$lng']['$t']);
+	  		locations.push(location);
+    	});
+  });
+}
+
+function loadDataSync() {
+	$.ajax({
+		url: 'https://spreadsheets.google.com/feeds/list/1fBLlw8xlO_yhL8rYfFlQnzvKR-swEtE7NRX41ysARCk/od6/public/values?alt=json',
+		async: false,
+		dataType: 'json',
+		success: function (data) {
+    	var entries = data.feed.entry;
+    	$(entries).each(function() {
+    		var location = {};
+				location.title = this['gsx$title']['$t'];
+				location.latitude = parseFloat(this['gsx$lat']['$t']);
+      	location.longitude = parseFloat(this['gsx$lng']['$t']);
+        location.institution = this['gsx$leadroname']['$t'];
+       	location.department = this['gsx$department']['$t'];
+        location.funder = this['gsx$fundingorgname']['$t'];
+        location.url = this['gsx$gtrprojecturl']['$t'];
+	  		locations.push(location);
+    	});
+	   }
+	});
+}
+
+function setLocations(map, locations) {
+  var bounds = new google.maps.LatLngBounds();
+  // Create nice, customised pop-up boxes, to appear when the pin/location is clicked on
+  var infowindow = new google.maps.InfoWindow({
+    content: "Content String"
+  });
+  for (var i = 0; i < locations.length; i++) {
+    var new_marker = createMarker(map, locations[i], infowindow);
+    bounds.extend(new_marker.position);
+  }
+  map.fitBounds(bounds);
+}
+
+function createMarker(map, location, infowindow) {
+  var position = {
+    lat: parseFloat(location.latitude),
+    lng: parseFloat(location.longitude)
+  };
+  var marker = new google.maps.Marker({
+    position: position,
+    map: map,
+    title: location.title,
+  });
+  google.maps.event.addListener(marker, 'click', function() {
+    infowindow.setContent('<div>'+
+    '<p><strong>' + ((location.url === undefined) ? location.title : ('<a href="' + location.url +'">' + location.title + '</a>')) + '</strong></p>' +
+    ((location.institution === undefined) ? "" : ('<p><strong>Lead institution: </strong>' + location.institution + '</p>')) +
+    ((location.department === undefined) ? "" : ('<p><strong>Depatment: </strong>' + location.department + '</p>')) +
+    ((location.funder === undefined) ? "" : ('<p><strong>Funder: </strong>' + location.funder + '</p>')) +
+    '</div>');
+    infowindow.open(map, marker);
+  });
+  return marker;
+}
+
+
+</script>
+</body>
+</html>
