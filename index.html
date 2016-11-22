@@ -42,7 +42,8 @@ function initialiseMap() {
 }
 
 function loadData() {
-  // Example spreadsheet, with latitude and longitude columns
+  // Example Google spreadsheet, with latitude and longitude columns
+  // Replace the ID of your Google spreadsheet in the URL: https://spreadsheets.google.com/feeds/list/ID_OF_YOUR_GOOGLE_SPREADSHEET/od6/public/values?alt=json
   $.getJSON("https://spreadsheets.google.com/feeds/list/1fBLlw8xlO_yhL8rYfFlQnzvKR-swEtE7NRX41ysARCk/od6/public/values?alt=json", function(data) {
     	// Modify the code below to suit the structure of your spreadsheet
     	var entries = data.feed.entry;
@@ -58,8 +59,9 @@ function loadData() {
 
 function loadDataSync() {
 	$.ajax({
-	    // Example spreadsheet, with latitude and longitude columns
-		url: 'https://spreadsheets.google.com/feeds/list/1fBLlw8xlO_yhL8rYfFlQnzvKR-swEtE7NRX41ysARCk/od6/public/values?alt=json',
+    // Example Google spreadsheet, with latitude and longitude columns
+    // Replace the ID of your Google spreadsheet in the URL: https://spreadsheets.google.com/feeds/list/ID_OF_YOUR_GOOGLE_SPREADSHEET/od6/public/values?alt=json
+  		url: 'https://spreadsheets.google.com/feeds/list/1fBLlw8xlO_yhL8rYfFlQnzvKR-swEtE7NRX41ysARCk/od6/public/values?alt=json',
 		async: false,
 		dataType: 'json',
 		success: function (data) {
