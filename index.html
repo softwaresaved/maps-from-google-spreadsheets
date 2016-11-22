@@ -5,8 +5,8 @@
     <title>Google Maps from Google Spreadsheets Demo</title>
     <style>
         #map {
-        height: 400px;
-        width: 100%;
+        height: 600px;
+        width: 800px;
         }
     </style>
 </head>
@@ -42,7 +42,9 @@ function initialiseMap() {
 }
 
 function loadData() {
+  // Example spreadsheet, with latitude and longitude columns
   $.getJSON("https://spreadsheets.google.com/feeds/list/1fBLlw8xlO_yhL8rYfFlQnzvKR-swEtE7NRX41ysARCk/od6/public/values?alt=json", function(data) {
+    	// Modify the code below to suit the structure of your spreadsheet
     	var entries = data.feed.entry;
     	$(entries).each(function() {
     		var location = {};
@@ -56,11 +58,13 @@ function loadData() {
 
 function loadDataSync() {
 	$.ajax({
+	    // Example spreadsheet, with latitude and longitude columns
 		url: 'https://spreadsheets.google.com/feeds/list/1fBLlw8xlO_yhL8rYfFlQnzvKR-swEtE7NRX41ysARCk/od6/public/values?alt=json',
 		async: false,
 		dataType: 'json',
 		success: function (data) {
     	var entries = data.feed.entry;
+    	// Modify the code below to suit the structure of your spreadsheet
     	$(entries).each(function() {
     		var location = {};
 				location.title = this['gsx$title']['$t'];
@@ -90,6 +94,8 @@ function setLocations(map, locations) {
 }
 
 function createMarker(map, location, infowindow) {
+
+  // Modify the code below to suit the structure of your spreadsheet (stored in variable 'location')
   var position = {
     lat: parseFloat(location.latitude),
     lng: parseFloat(location.longitude)
@@ -103,7 +109,7 @@ function createMarker(map, location, infowindow) {
     infowindow.setContent('<div>'+
     '<p><strong>' + ((location.url === undefined) ? location.title : ('<a href="' + location.url +'">' + location.title + '</a>')) + '</strong></p>' +
     ((location.institution === undefined) ? "" : ('<p><strong>Lead institution: </strong>' + location.institution + '</p>')) +
-    ((location.department === undefined) ? "" : ('<p><strong>Depatment: </strong>' + location.department + '</p>')) +
+    ((location.department === undefined) ? "" : ('<p><strong>Department: </strong>' + location.department + '</p>')) +
     ((location.funder === undefined) ? "" : ('<p><strong>Funder: </strong>' + location.funder + '</p>')) +
     '</div>');
     infowindow.open(map, marker);
