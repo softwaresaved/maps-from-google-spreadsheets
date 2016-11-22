@@ -1,5 +1,5 @@
 # maps-from-google-spreadsheets
-JavaScript code for generating dynamic maps from Google spreadsheets using Google Maps API.
+Example JavaScript code for generating dynamic maps from a Google spreadsheet using Google Maps API.
 
 When testing it, make sure you use your own Google API key in the portion of the code:
  ```
@@ -8,3 +8,5 @@ When testing it, make sure you use your own Google API key in the portion of the
     </script>
 
  ```
+
+ See [live example](http://codepen.io/anon/pen/rWybvX) at Codepen.
