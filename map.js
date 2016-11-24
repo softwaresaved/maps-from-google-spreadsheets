@@ -2,22 +2,25 @@ var map;
 var locations = [];
 
 function initialiseMap() {
-  // Load data from an example Google spreadsheet that contains latitude and longitude columns
-  // Replace the ID of your Google spreadsheet in the URL:
-  // https://spreadsheets.google.com/feeds/list/ID_OF_YOUR_GOOGLE_SPREADSHEET/od6/public/values?alt=json
-  $.getJSON("https://spreadsheets.google.com/feeds/list/1fBLlw8xlO_yhL8rYfFlQnzvKR-swEtE7NRX41ysARCk/od6/public/values?alt=json", function(data) {
-    	// Modify the code below to suit the structure of your spreadsheet
-    	var entries = data.feed.entry;
-    	$(entries).each(function() {
+
+  // Load data from an example Google spreadsheet that contains latitude and longitude columns using Google Sheets API v4 that returns JSON.
+  // Replace the ID of your Google spreadsheet and you API key in the URL:
+  // https://sheets.googleapis.com/v4/spreadsheets/ID_OF_YOUR_GOOGLE_SPREADSHEET/values/Sheet1!A2:Q?key=YOUR_API_KEY
+  // Also make sure your API key is authorised to access Google Sheets API - you can enable that through your Google Developer console.
+  // Finally, in the URL, fix the sheet name and the range that you are accessing from your spreadsheet. 'Sheet1' is the default name for the first sheet.
+  $.getJSON("https://sheets.googleapis.com/v4/spreadsheets/1fBLlw8xlO_yhL8rYfFlQnzvKR-swEtE7NRX41ysARCk/values/Sheet1!A2:Q?key=AIzaSyD112yF6ORTtrx1-ugfhJLcx1VHDOla1Vs", function(data) {
+    	// data.values contains the array of rows from the spreadsheet. Each row is also an array of cell values.
+    	// Modify the code below to suit the structure of your spreadsheet.
+    	$(data.values).each(function() {
     		var location = {};
-				location.title = this['gsx$title']['$t'];
-				location.latitude = parseFloat(this['gsx$lat']['$t']);
-      	location.longitude = parseFloat(this['gsx$lng']['$t']);
-        location.institution = this['gsx$leadroname']['$t'];
-       	location.department = this['gsx$department']['$t'];
-        location.funder = this['gsx$fundingorgname']['$t'];
-        location.url = this['gsx$gtrprojecturl']['$t'];
-	  		locations.push(location);
+				location.title = this[2];
+				location.latitude = parseFloat(this[15]);
+      	        location.longitude = parseFloat(this[16]);
+                location.institution = this[3];
+       	        location.department = this[4];
+                location.funder = this[0];
+                location.url = this[13];
+	  		    locations.push(location);
     	});
 
       // Center on (0, 0). Map center and zoom will reconfigure later (fitbounds method)
