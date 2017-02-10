@@ -1,12 +1,7 @@
-# maps-from-google-spreadsheets
-Example JavaScript code for generating dynamic maps from a Google spreadsheet using Google Maps API.
+# Visualisation examples for CSV and Google SpreadSheets data
 
-When testing it, make sure you use your own Google API key in the portion of the code:
- ```
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initialiseMap">
-    </script>
+Some examples for visualising data obtained from Google SpreadSheets and CSV files in GoogleMaps and list formats.
 
- ```
-
- See [live example](http://codepen.io/anon/pen/rWybvX) at Codepen.
+- list-csv - visualising Software Carpentry events data from AMY in an HTML table format
+- map-csv - visualising Software Carpentry events data from AMY using Google Maps
+- map-google-spreadsheets - visualising CDT events data from a Google SpreadSheet using Google Maps
