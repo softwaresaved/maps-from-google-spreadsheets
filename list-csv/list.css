@@ -1,0 +1,20 @@
+#list {
+    margin: auto;
+}
+
+#list tr:nth-child(odd) {
+    background-color: #F2F2F2;
+}
+
+#list tr td {
+    padding: .4em .8em .4em .8em;
+}
+
+#list tr td:nth-child(2) {
+    width: 350px;
+}
+
+#list tr td:nth-child(3) {
+    white-space: nowrap;
+    text-align: left;
+}
