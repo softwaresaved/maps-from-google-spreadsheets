@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Google Maps from Google Spreadsheets Demo</title>
+    <link rel="stylesheet" href="map.css">
+</head>
+
+<body>
+
+<h3>Google Maps from CSV Demo</h3>
+<p>It loads and parses an <a href="data.csv" target="_blank"> example publicly available CSV file</a> each time it loads the page (before generating a map out of it), so it could do with a bit of optimisaiton.
+It uses the jquery.csv.js JavaScript library.</p>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/0.71/jquery.csv-0.71.min.js"></script>
+
+<script src="map.js"></script>
+
+<div id="map"></div>
+<!-- Replace the value of the key parameter in the call to the Google Maps JavaScript API URL below with your own API key. -->
+<!-- Make sure your API key is authorised to access the Google Maps API - you can enable that through your Google Developer console. -->
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvPbCnMhx0xmZ32lztJoi_H1r3OSKM290&callback=initialiseMap">
+</script>
+
+
+</body>
+</html>
