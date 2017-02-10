@@ -8,43 +8,44 @@ function initialiseMap() {
   // https://sheets.googleapis.com/v4/spreadsheets/ID_OF_YOUR_GOOGLE_SPREADSHEET/values/Sheet1!A2:Q?key=YOUR_API_KEY
   // Also make sure your API key is authorised to access Google Sheets API - you can enable that through your Google Developer console.
   // Finally, in the URL, fix the sheet name and the range that you are accessing from your spreadsheet. 'Sheet1' is the default name for the first sheet.
-  $.getJSON("https://sheets.googleapis.com/v4/spreadsheets/1fBLlw8xlO_yhL8rYfFlQnzvKR-swEtE7NRX41ysARCk/values/Sheet1!A2:Q?key=AIzaSyD112yF6ORTtrx1-ugfhJLcx1VHDOla1Vs", function(data) {
-    	// data.values contains the array of rows from the spreadsheet. Each row is also an array of cell values.
-    	// Modify the code below to suit the structure of your spreadsheet.
-    	$(data.values).each(function() {
-    		var location = {};
-				location.title = this[2];
-				location.latitude = parseFloat(this[15]);
-      	        location.longitude = parseFloat(this[16]);
+  $.getJSON("https://sheets.googleapis.com/v4/spreadsheets/1fBLlw8xlO_yhL8rYfFlQnzvKR-swEtE7NRX41ysARCk/values/Sheet1!A2:Q?key=AIzaSyAvPbCnMhx0xmZ32lztJoi_H1r3OSKM290", function(data) {
+        // data.values contains the array of rows from the spreadsheet. Each row is also an array of cell values.
+        // Modify the code below to suit the structure of your spreadsheet.
+        $(data.values).each(function() {
+                var location = {};
+                location.title = this[2];
+                location.latitude = parseFloat(this[15]);
+                location.longitude = parseFloat(this[16]);
                 location.institution = this[3];
-       	        location.department = this[4];
+                location.department = this[4];
                 location.funder = this[0];
                 location.url = this[13];
-	  		    locations.push(location);
-    	});
+                locations.push(location);
+        });
 
-      // Center on (0, 0). Map center and zoom will reconfigure later (fitbounds method)
+      // Center on UK (54, -4)
       var mapOptions = {
-        zoom: 10,
-        center: new google.maps.LatLng(0, 0)
+        zoom: 6,
+        center: new google.maps.LatLng(54.75, -4.1)
       };
       var map = new google.maps.Map(document.getElementById('map'), mapOptions);
-      setLocations(map, locations);
-  });
-}
+      //var bounds = new google.maps.LatLngBounds();
+      //var southWest = new google.maps.LatLng(50.80, -8.45);
+      //var northEast = new google.maps.LatLng(56.90, 0.78);
+      //var bounds = new google.maps.LatLngBounds(southWest, northEast);
 
+      // Create nice, customised pop-up boxes, to appear when the marker is clicked on
+      var infowindow = new google.maps.InfoWindow({
+        content: "Content String"
+      });
 
-function setLocations(map, locations) {
-  var bounds = new google.maps.LatLngBounds();
-  // Create nice, customised pop-up boxes, to appear when the marker is clicked on
-  var infowindow = new google.maps.InfoWindow({
-    content: "Content String"
+      // Add each new marker to the map
+      for (var i = 0; i < locations.length; i++) {
+        var new_marker = createMarker(map, locations[i], infowindow);
+        //bounds.extend(new_marker.position);
+      }
+      //map.fitBounds(bounds);
   });
-  for (var i = 0; i < locations.length; i++) {
-    var new_marker = createMarker(map, locations[i], infowindow);
-    bounds.extend(new_marker.position);
-  }
-  map.fitBounds(bounds);
 }
 
 function createMarker(map, location, infowindow) {
